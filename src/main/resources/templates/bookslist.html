@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Books List</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div class="form-position">
+  <form id="random-book" th:action="@{/books/randombook}" th:method="POST" class="form2">
+    <input type="submit" value="Create random book"/>
+  </form>
+</div>
+
+
+<div th:switch="${books}">
+  <h2 th:case="null">No books yet!</h2>
+  <div th:case="*">
+    <h2 class="textParam">Books list</h2>
+
+    <table class="center">
+      <tr>
+        <th>
+
+          <form th:method="POST" th:action="@{/books/save}" th:object="${addbookform}" class="form">
+            <label for="name">Name</label>
+            <input th:type="text" th:field="*{bookName}" id="name">
+            <br>
+            <label for="author">Author</label>
+            <input th:type="text" th:field="*{author}" id="author">
+            <br>
+            <label for="price">Price</label>
+            <input th:type="text" th:field="*{price}" id="price">
+            <br>
+            <input type="submit" value="Create" class="addbtn2 addbtn">
+            <br>
+          </form>
+
+          <a th:href="@{/books/addbook}" th:object="${books}">Add Book</a>
+        </th>
+      </tr>
+    </table>
+
+    <table class="center">
+      <tr>
+        <th>##</th>
+        <th>BookID</th>
+        <th>Name</th>
+        <th>Author</th>
+        <th>price</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+      <tr th:each="book, b : ${books}">
+
+        <td><a th:href="@{/books/{id}(id=${book.getId()})}" th:method="GET" th:text="${b.index + 1}"></a></td>
+
+        <td th:text="${book.id}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.price}"></td>
+        <td><a th:href="@{/books/{id}(id=${book.getId()})}" th:method="GET">Edit</a></td>
+        <td><a th:href="@{/books/delete/{id}(id=${book.getId()})}" th:method="GET">Delete</a></td>
+<!--        <td>-->
+<!--          <form th:action="@{/books/delete/{id}(id=${book.getId()})}" th:method="DELETE">-->
+<!--            <input type="submit" value="Delete"/>-->
+<!--          </form>-->
+<!--        </td>-->
+
+      </tr>
+    </table>
+  </div>
+
+  <br>
+  <br>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+services:
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    container_name: mysqldb
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=admin
+      - MYSQL_USER=admin
+      - MYSQL_DATABASE=books
+
+  bookslist:
+    depends_on:
+      - mysqldb
+    image: olegvn88/bookslist
+    restart: unless-stopped
+    container_name: books
+    ports:
+      - 8080:8080
+
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/books
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_FLYWAY_ENABLED=true
+      - SPRING_FLYWAY_URL=jdbc:mysql://mysqldb:3306/books
+      - SPRING_FLYWAY_USER=root
+      - SPRING_FLYWAY_PASSWORD=root
